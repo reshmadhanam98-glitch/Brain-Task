@@ -2,19 +2,20 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      docker: 20
     commands:
+      - echo "Installing kubectl..."
       - curl -LO https://dl.k8s.io/release/v1.31.0/bin/linux/amd64/kubectl
       - chmod +x kubectl
       - mv kubectl /usr/local/bin/
 
   pre_build:
     commands:
+      - echo "Logging in to Docker Hub..."
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
   build:
     commands:
+      - echo "Building Docker image..."
       - docker build -t brain-tasks-app .
       - docker tag brain-tasks-app:latest $DOCKER_USERNAME/brain-tasks-app:latest
       - docker push $DOCKER_USERNAME/brain-tasks-app:latest
